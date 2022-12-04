@@ -14,15 +14,30 @@
 !include OvmfPkg/OvmfPkgDefines.fdf.inc
 
 #
-# Build the variable store and the firmware code as one unified flash device
-# image.
+# Build the variable store and the firmware code as separate flash device
+# images.
 #
-[FD.OVMF]
+[FD.OVMF_VARS]
 BaseAddress   = $(FW_BASE_ADDRESS)
-Size          = $(FW_SIZE)
+Size          = $(VARS_SIZE)
 ErasePolarity = 1
 BlockSize     = $(BLOCK_SIZE)
-NumBlocks     = $(FW_BLOCKS)
+NumBlocks     = $(VARS_BLOCKS)
+
+!include VarStore.fdf.inc
+
+[FD.OVMF_CODE]
+BaseAddress   = $(CODE_BASE_ADDRESS)
+Size          = $(CODE_SIZE)
+ErasePolarity = 1
+BlockSize     = $(BLOCK_SIZE)
+NumBlocks     = $(CODE_BLOCKS)
+
+0x00000000|$(FVMAIN_SIZE)
+FV = FVMAIN_COMPACT
+
+$(FVMAIN_SIZE)|$(SECFV_SIZE)
+FV = SECFV
 
 !include OvmfPkg/VarStore.fdf.inc
 
