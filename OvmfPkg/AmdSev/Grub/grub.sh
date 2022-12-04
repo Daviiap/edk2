@@ -44,6 +44,7 @@ GRUB_MODULES="
             linux
             linuxefi
             reboot
+            sevsecret
             "
 basedir=$(dirname -- "$0")
 
